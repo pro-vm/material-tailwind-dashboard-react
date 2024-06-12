@@ -10,14 +10,35 @@ import {
 } from "@material-tailwind/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { authorsTableData, projectsTableData } from "@/data";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export function Tables() {
+  const [users, setUsers] = useState(null);
+  //const url = "https://jsonplaceholder.typicode.com/posts";
+  const url = "http://10.119.1.134:6086/rest/getuser";
+
+  const getUsers = async () => {
+    try {
+      const response = await axios.get(url);
+      setUsers(response.data);
+      console.log("data----", response.data);
+    } catch (err) {
+      console.error("Error fetching data: ", err);
+    }
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []);
+
+  console.log("users---------", users);
   return (
     <div className="mt-12 mb-8 flex flex-col gap-12">
       <Card>
         <CardHeader variant="gradient" color="gray" className="mb-8 p-6">
           <Typography variant="h6" color="white">
-            Authors Table
+            Authors
           </Typography>
         </CardHeader>
         <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
@@ -108,7 +129,7 @@ export function Tables() {
       <Card>
         <CardHeader variant="gradient" color="gray" className="mb-8 p-6">
           <Typography variant="h6" color="white">
-            Projects Table
+            Projects
           </Typography>
         </CardHeader>
         <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
